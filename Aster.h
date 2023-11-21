@@ -16,8 +16,8 @@ public:
 	};
 private:
 
-	vector < vector < int >> map;
-	vector < vector < Cell >> CellMap;
+	vector < vector < int >> map;//通れるところとかコストとか
+	vector < vector < Cell >> CellMap;//情報入れておくもの
 	int heuristic(POS now);//現在地からの最短経路
 	
 
@@ -26,7 +26,7 @@ public:
 	POS start_;//探索開始地点
 	Aster();
 	~Aster();
-	void Search();//肝要。再帰？
+	void Search(POS pos_);//肝要。再帰？
 	void Show();//探索終了したら
 };
 

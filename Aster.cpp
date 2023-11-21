@@ -1,6 +1,8 @@
 #include<iostream>
 #include<cmath>
 #include "Aster.h"
+#include<deque>
+
 const int nonPath = 0;//0‚Í’Ê‚ê‚È‚¢êŠI
 int Aster::heuristic(POS now)
 {
@@ -39,10 +41,16 @@ Aster::~Aster()
 {
 }
 
-void Aster::Search()
+void Aster::Search(POS pos_)
 {	
+	std::deque<POS>poslist;//
 	//ã‰º¶‰EŒ©‚é
-	//
+	{//ã
+		int next = pos_.y_-1;
+		if (next >= 0 && map.at(next).at(pos_.x_) != nonPath);
+		{
+			
+		}
 }
 
 void Aster::Show()
