@@ -41,18 +41,24 @@ Aster::~Aster()
 {
 }
 
+void Aster::BeginSearch()
+{
+	CellMap.at(start_.y_).at(start_.x_).certainCost = 0;
+	Search(start_);
+}
+
 void Aster::Search(POS pos_)
-{	
+{
 	std::deque<POS>poslist;//
 	//ã‰º¶‰EŒ©‚é
 	{//ã
-		int next = pos_.y_-1;
+		int next = pos_.y_ - 1;
 		if (next >= 0 && map.at(next).at(pos_.x_) != nonPath);
 		{
-			
+			map.at(next).at
 		}
+	}
 }
-
 void Aster::Show()
 {
 }
