@@ -37,7 +37,7 @@ void Aster::BeginSearch()
 	//CellMap.at(start_.y_).at(start_.x_).certainCost = 0;
 	Cell startcell(start_);
 	openCells.push_back(startcell);
-	openCells.front().certainCost = 0;
+	openCells.front().cCost = 0;
 	Search();
 }
 
@@ -47,9 +47,9 @@ void Aster::Search()
 	int index = -1;
 	for (auto i=0;i<openCells.size();i++)
 	{
-		if (min > openCells.at(i).certainCost)
+		if (min > openCells.at(i).cCost)
 		{
-			min = openCells.at(i).certainCost;
+			min = openCells.at(i).cCost;
 			index = i;
 		}
 	}
@@ -61,11 +61,24 @@ void Aster::Search()
 	{//上
 		POS next = { now.cellpos.y_-1,now.cellpos.x_};
 		Cell nextcell(next);
-		if (next.y_ >= 0 && map.at(next.y_).at(next.x_) != nonPath //範囲外もしくは通れないマスじゃない
+		if (next.y_ >= 0 && map.at(next.y_).at(next.x_) != nonPath //範囲外もしくは通れないマスではない
 			&& (std::find(closeCells.begin(),closeCells.end(),nextcell)==closeCells.end()))//かつcloselistに入っていない
 		{
-		
-
+			auto itr = std::find(openCells.begin(), openCells.end(), nextcell);
+			if (itr == openCells.end())//openlistに入ってなかったら
+			{//cell追加する
+				nextcell.parent = &now;
+				nextcell.cCost = now.cCost + map[next.y_][next.x_];//実コスト追加
+				nextcell.hCost = heuristic(next);//推測コスト
+				nextcell.eCost = nextcell.cCost + nextcell.hCost;
+			}
+			else//入ってたら
+			{
+				int comp =now.cCost + map[next.y_][next.x_];
+				if (itr->cCost > comp)//実コスト比較して、少なければ親をnowにして実コスト更新←条件あってるか
+					itr->parent = &now;
+				itr->cCost = comp;
+			}
 		}
 	}
 

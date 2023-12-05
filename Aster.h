@@ -16,10 +16,11 @@ public:
 	struct Cell {//いちます毎の情報
 		POS cellpos;
 		//int cost;//そのセルを通るときのコスト
-		int certainCost;//実コスト
-		int estimationCost;//推定関数、実＋ひゅーり
+		int cCost;//実コスト、今までの移動
+		int hCost;//推測コスト、ひゅーり
+		int eCost;//トータル、実＋ひゅーり
 		Cell* parent;
-		Cell():/*cost(-1),*/certainCost(-1),estimationCost(-1),parent(nullptr){}
+		Cell():/*cost(-1),*/cCost(-1),hCost(-1),eCost(-1),parent(nullptr){}
 		Cell(POS pos) :Cell() { cellpos = pos; }
 		bool operator==(const Cell& a) { return(this->cellpos == a.cellpos); }
 	};
