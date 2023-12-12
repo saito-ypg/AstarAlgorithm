@@ -1,7 +1,9 @@
 #pragma once
 #include<vector>
+#include<string>
 #include<map>
 using std::vector;
+using std::string;
 const int mapX = 6, mapY =6;
 
 class Aster
@@ -12,6 +14,9 @@ public:
 		POS() :x_(-1), y_(-1) {} 
 		POS(int x, int y):x_(x),y_(y){} 
 		bool operator==(const POS &a) { return(this->x_ == a.x_ && this->y_ == a.y_);}
+		string toString() {
+			return string("{" +std::to_string( x_ )+ "," +std::to_string( y_ )+ "}");
+		}
 	};
 	struct Cell {//いちます毎の情報
 		POS cellpos;
@@ -28,9 +33,11 @@ private:
 	vector < vector < int >> map;//通れるところとかコストとか
 	//vector < vector < Cell >> CellMap;//情報入れておくもの
 	int heuristic(POS now);//現在地からの最短経路
-	void Search();//肝要。再帰？
+	void search();//肝要。再帰？
+	void checkNext(POS next,Cell nowCell);
 	std::vector<Cell> openCells;
-	std::vector<Cell>closeCells;
+	std::vector<Cell>closeCells;//いらない疑惑
+	void getRoute(Cell cell);
 public:
 	POS target_;//探索目的地点
 	POS start_;//探索開始地点
