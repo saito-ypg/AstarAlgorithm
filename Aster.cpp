@@ -39,6 +39,7 @@ void Aster::BeginSearch()
 	Cell* startcell=new Cell(start_);
 	startcell->cCost = 0;
 	openCells.push_back(startcell);
+	openCells.front().cCost = 0;
 	search();
 }
 
@@ -48,12 +49,12 @@ void Aster::search()
 	while (true)
 	{
 		int min = INT_MAX;
-		auto index = openCells.end();//目的
-		for (auto i = openCells.begin(); i != openCells.end(); i++)
+		int index = -1;
+		for (auto i = 0; i < openCells.size(); i++)
 		{
-			if (min > i->eCost)
+			if (min > openCells.at(i).eCost)
 			{
-				min = i->eCost;
+				min = openCells.at(i).eCost;
 				index = i;
 			}
 		}
@@ -118,10 +119,8 @@ void Aster::checkNext(POS next,Cell nowCell)
 		{
 			int comp = nowCell.cCost + map[next.y_][next.x_];
 			if (itr->cCost > comp)//実コスト比較して、少なければ親をnowにして実コスト更新←条件あってるか
-			{
 				itr->parent = &nowCell;
-				itr->cCost = comp;
-			}
+			itr->cCost = comp;
 		}
 	}
 }
