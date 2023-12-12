@@ -17,8 +17,8 @@ Aster::Aster()
 	
 	map = {
 		   {1,1,1,1,1,1},
-		   {1,1,1,1,1,1},
-		   {1,1,1,1,1,1},
+		   {1,1,0,1,0,1},
+		   {1,1,1,0,1,1},
 		   {1,1,1,1,1,1},
 		   {1,1,1,1,1,1},
 		   {1,1,1,1,1,1},
@@ -118,8 +118,10 @@ void Aster::checkNext(POS next,Cell nowCell)
 		{
 			int comp = nowCell.cCost + map[next.y_][next.x_];
 			if (itr->cCost > comp)//実コスト比較して、少なければ親をnowにして実コスト更新←条件あってるか
+			{
 				itr->parent = &nowCell;
-			itr->cCost = comp;
+				itr->cCost = comp;
+			}
 		}
 	}
 }
