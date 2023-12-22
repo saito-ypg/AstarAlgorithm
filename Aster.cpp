@@ -59,7 +59,7 @@ void Aster::search()
 		}
 		closeCells.push_back(openCells.at(index));
 		openCells.erase(openCells.begin() + index);
-		Cell now = closeCells.back();
+		Cell &now = closeCells.back();
 		if (now.cellpos == target_)
 		{
 			std::cout << "探索が終了しました" << std::endl;
@@ -70,7 +70,7 @@ void Aster::search()
 		//上下左右見る
 		{//上
 			POS next = { now.cellpos.x_,now.cellpos.y_ - 1 };
-			checkNext(next, now);
+			checkNext(next, now);//関数入るタイミングで親が書き換わってる
 		}
 		{//下
 			POS next = {now.cellpos.x_, now.cellpos.y_ + 1 };
