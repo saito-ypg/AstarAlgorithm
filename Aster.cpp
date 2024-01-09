@@ -58,7 +58,8 @@ void Aster::search()
 			}
 		}
 		Cell* now = &openCells.at(index);
-		closeCells.push_back(std::move(openCells.at(index)));
+		auto push = openCells.begin() + index;
+		std::move(push,push,std::back_inserter(closeCells));
 		//openCells.erase(openCells.begin() + index);//‚±‚±‚ÅŽ€‚ñ‚Å‚éH
 		
 		if (now->cellpos == target_)
