@@ -98,7 +98,7 @@ void Aster::search()
 //Œ»Ýƒm[ƒh‚ªƒS[ƒ‹ƒm[ƒh‚¾‚Á‚½‚çI—¹
 	//ƒS[ƒ‹ƒm[ƒh‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚çI—¹
 }
-void Aster::checkNext(POS next, const Cell& nowCell)
+void Aster::checkNext(POS next, Cell& nowCell)
 {
 	if (next.x_ >= mapX || next.x_ < 0 || next.y_ >= mapY || next.y_ < 0)//”ÍˆÍ“à
 		return;

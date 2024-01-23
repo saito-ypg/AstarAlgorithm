@@ -35,7 +35,7 @@ private:
 	//vector < vector < Cell >> CellMap;//情報入れておくもの
 	int heuristic(POS now);//現在地からの最短経路
 	void search();//肝要。再帰？
-	void checkNext(POS next,const Cell& nowCell);
+	void checkNext(POS next,Cell& nowCell);
 	std::vector<Cell> openCells;
 	std::vector<Cell>closeCells;//いらない疑惑
 	void getRoute(Cell cell);
