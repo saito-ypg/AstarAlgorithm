@@ -28,13 +28,14 @@ public:
 		Cell():/*cost(-1),*/cCost(-1),hCost(-1),eCost(-1),parent(nullptr){}
 		Cell(POS pos) :Cell() { cellpos = pos; }
 		bool operator==(const Cell& a) { return(this->cellpos == a.cellpos); }
+		bool operator==(const POS& a) { return(this->cellpos == a); }
 	};
 private:
 	vector < vector < int >> map;//通れるところとかコストとか
 	//vector < vector < Cell >> CellMap;//情報入れておくもの
 	int heuristic(POS now);//現在地からの最短経路
 	void search();//肝要。再帰？
-	void checkNext(POS next,Cell nowCell);
+	void checkNext(POS next,const Cell& nowCell);
 	std::vector<Cell> openCells;
 	std::vector<Cell>closeCells;//いらない疑惑
 	void getRoute(Cell cell);
