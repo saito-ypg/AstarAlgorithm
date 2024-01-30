@@ -1,8 +1,7 @@
 #include<iostream>
 #include<cmath>
-#include "Aster.h"
-#include<cmath>
 #include<algorithm>
+#include "Aster.h"
 //https://stone-program.com/python/algorithm/a-star-introduction/
 //https://qiita.com/2dgames_jp/items/f29e915357c1decbc4b7
 const int nonPath = 0;//0は通れない場所！
@@ -23,8 +22,8 @@ Aster::Aster()
 		   {1,1,1,1,1,1},
 		   {1,1,1,1,1,1},
 	};//各要素はコスト
-	openCells.reserve(10);
-	closeCells.reserve(10);
+	//openCells.reserve(10);
+	//closeCells.reserve(10);
 
 	
 
@@ -49,19 +48,20 @@ void Aster::search()
 	while (true)
 	{
 		int min = INT_MAX;
-		int index = -1;
-		for (auto i = 0; i < openCells.size(); i++)
+		auto index = openCells.end();//目的
+		for (auto i = openCells.begin(); i != openCells.end(); i++)
 		{
-			if (min > openCells.at(i).eCost)
+			if (min > i->eCost)
 			{
-				min = openCells.at(i).eCost;
+				min = i->eCost;
 				index = i;
 			}
 		}
-		Cell now = openCells.at(index);
-		closeCells.push_back(now);
-		openCells.at(index) = Cell();
-		openCells.erase(openCells.begin() + index);//ここで死んでる？
+	//	Cell now =test;//ここで親が死んでる
+		closeCells.emplace_back(index);
+		openCells.erase(index);
+
+		Cell now = closeCells.back();
 
 		if (now.cellpos == target_)
 		{
@@ -142,3 +142,14 @@ void Aster::Show()
 		std::cout << i.toString ()<< std::endl;
 	}
 }
+
+//Aster::Cell Aster::Cell::operator=(const Cell& a)
+//{
+//	Cell retval;
+//	retval.cellpos = a.cellpos;
+//	retval.cCost = a.cCost;
+//	retval.hCost = a.hCost;
+//	retval.eCost = a.eCost;
+//	retval.parent = a.parent;
+//	return retval;
+//}

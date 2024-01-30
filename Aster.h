@@ -1,5 +1,6 @@
 #pragma once
 #include<vector>
+#include<list>
 #include<string>
 #include<map>
 using std::vector;
@@ -29,6 +30,7 @@ public:
 		Cell(POS pos) :Cell() { cellpos = pos; }
 		bool operator==(const Cell& a) { return(this->cellpos == a.cellpos); }
 		bool operator==(const POS& a) { return(this->cellpos == a); }
+	//	Cell operator=(const Cell& a);
 	};
 private:
 	vector < vector < int >> map;//通れるところとかコストとか
@@ -36,8 +38,8 @@ private:
 	int heuristic(POS now);//現在地からの最短経路
 	void search();//肝要。再帰？
 	void checkNext(POS next,Cell& nowCell);
-	std::vector<Cell> openCells;
-	std::vector<Cell>closeCells;//いらない疑惑
+	std::list<Cell> openCells;
+	std::list<Cell>closeCells;//いらない疑惑
 	void getRoute(Cell cell);
 public:
 	POS target_;//探索目的地点
