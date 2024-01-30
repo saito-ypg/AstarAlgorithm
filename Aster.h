@@ -38,8 +38,8 @@ private:
 	int heuristic(POS now);//Œ»İ’n‚©‚ç‚ÌÅ’ZŒo˜H
 	void search();//ŠÌ—vBÄ‹AH
 	void checkNext(POS next,Cell& nowCell);
-	std::list<Cell> openCells;
-	std::list<Cell>closeCells;//‚¢‚ç‚È‚¢‹^˜f
+	std::list<Cell*> openCells;
+	std::list<Cell*>closeCells;//‚¢‚ç‚È‚¢‹^˜f
 	void getRoute(Cell cell);
 public:
 	POS target_;//’Tõ–Ú“I’n“_

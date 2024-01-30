@@ -36,9 +36,9 @@ Aster::~Aster()
 void Aster::BeginSearch()
 {
 	//CellMap.at(start_.y_).at(start_.x_).certainCost = 0;
-	Cell startcell(start_);
+	Cell* startcell=new Cell(start_);
+	startcell->cCost = 0;
 	openCells.push_back(startcell);
-	openCells.front().cCost = 0;
 	search();
 }
 
@@ -57,11 +57,9 @@ void Aster::search()
 				index = i;
 			}
 		}
-	//	Cell now =test;//‚±‚±‚Åe‚ª€‚ñ‚Å‚é
-		closeCells.emplace_back(index);
+		Cell now =(*index);//‚±‚±‚Åe‚ª€‚ñ‚Å‚é
+		closeCells.emplace_back(now);
 		openCells.erase(index);
-
-		Cell now = closeCells.back();
 
 		if (now.cellpos == target_)
 		{
