@@ -57,10 +57,9 @@ void Aster::search()
 				index = i;
 			}
 		}
-		Cell now =(*index);//ここで親が死んでる
-		closeCells.emplace_back(now);
-		openCells.erase(index);
-
+		closeCells.push_back(openCells.at(index));
+		openCells.erase(openCells.begin() + index);
+		Cell now = closeCells.back();
 		if (now.cellpos == target_)
 		{
 			std::cout << "探索が終了しました" << std::endl;
@@ -71,7 +70,7 @@ void Aster::search()
 		//上下左右見る
 		{//上
 			POS next = { now.cellpos.x_,now.cellpos.y_ - 1 };
-			checkNext(next, now);//関数入るタイミングで親が書き換わってる
+			checkNext(next, now);
 		}
 		{//下
 			POS next = {now.cellpos.x_, now.cellpos.y_ + 1 };
@@ -96,36 +95,35 @@ void Aster::search()
 //現在ノードがゴールノードだったら終了
 	//ゴールノードが見つからなかったら終了
 }
-void Aster::checkNext(POS next, Cell& nowCell)
+void Aster::checkNext(POS next,Cell nowCell)
 {
-	if (next.x_ >= mapX || next.x_ < 0 || next.y_ >= mapY || next.y_ < 0)//範囲内
-		return;
-	if (map.at(next.y_).at(next.x_) == nonPath)//通れないマスではない
-		return;
-	Cell nextcell(next);
-	if (std::find(closeCells.begin(), closeCells.end(), next) != closeCells.end())//かつcloselistに入っていない
-		return;
-
-	auto itr= std::find(openCells.begin(), openCells.end(), next);//ここがおかしい。openに入ってたcellの情報が残ってる
-	auto end = openCells.end();
-	if (itr == end)//openlistに入ってなかったら
-	{//cell追加する
-		nextcell.parent = &nowCell;
-		nextcell.cCost = nowCell.cCost + map[next.y_][next.x_];//実コスト追加
-		nextcell.hCost = heuristic(next);//推測コスト
-		nextcell.eCost = nextcell.cCost + nextcell.hCost;
-		openCells.push_back(nextcell);
-	}
-	else//入ってたら
+	if(next.x_>=mapX||next.x_<0||next.y_>=mapY||next.y_<0)//範囲外なら見ない
 	{
-		int comp = nowCell.cCost + map[next.y_][next.x_];
-		if (itr->cCost > comp)//実コスト比較して、少なければ親をnowにして実コスト更新←条件あってるか
+		return;
+	}
+		Cell nextcell(next);
+	if (map.at(next.y_).at(next.x_) != nonPath //通れないマスではない
+		&& (std::find(closeCells.begin(), closeCells.end(), nextcell) == closeCells.end()))//かつcloselistに入っていない
+	{
+		auto itr = std::find(openCells.begin(), openCells.end(), nextcell);
+		if (itr == openCells.end())//openlistに入ってなかったら
+		{//cell追加する
+			nextcell.parent = &nowCell;
+			nextcell.cCost = nowCell.cCost + map[next.y_][next.x_];//実コスト追加
+			nextcell.hCost = heuristic(next);//推測コスト
+			nextcell.eCost = nextcell.cCost + nextcell.hCost;
+			openCells.push_back(nextcell);
+		}
+		else//入ってたら
 		{
-			itr->parent = &nowCell;
-			itr->cCost = comp;
+			int comp = nowCell.cCost + map[next.y_][next.x_];
+			if (itr->cCost > comp)//実コスト比較して、少なければ親をnowにして実コスト更新←条件あってるか
+			{
+				itr->parent = &nowCell;
+				itr->cCost = comp;
+			}
 		}
 	}
-
 }
 void Aster::getRoute(Cell cell)
 {
