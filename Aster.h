@@ -14,7 +14,7 @@ public:
 		int x_; int y_;
 		POS() :x_(-1), y_(-1) {} 
 		POS(int x, int y):x_(x),y_(y){} 
-		bool operator==(const POS &a) { return(this->x_ == a.x_ && this->y_ == a.y_);}
+		bool operator==(const POS&  a) const{ return(this->x_ == a.x_ && this->y_ == a.y_);}
 		string toString() {
 			return string("{" +std::to_string( x_ )+ "," +std::to_string( y_ )+ "}");
 		}
@@ -28,8 +28,7 @@ public:
 		Cell* parent;
 		Cell():/*cost(-1),*/cCost(-1),hCost(-1),eCost(-1),parent(nullptr){}
 		Cell(POS pos) :Cell() { cellpos = pos; }
-		bool operator==(const Cell& a) { return(this->cellpos == a.cellpos); }
-		bool operator==(const POS& a) { return(this->cellpos == a); }
+
 	//	Cell operator=(const Cell& a);
 	};
 private:
@@ -37,9 +36,9 @@ private:
 	//vector < vector < Cell >> CellMap;//情報入れておくもの
 	int heuristic(POS now);//現在地からの最短経路
 	void search();//肝要。再帰？
-	void checkNext(POS next,Cell &nowCell);
-	std::vector<Cell> openCells;
-	std::vector<Cell>closeCells;//いらない疑惑
+	void checkNext(POS next,Cell*const nowCell );
+	std::list<Cell> openCells;
+	std::list<Cell>closeCells;//いらない疑惑
 	void getRoute(Cell cell);
 public:
 	POS target_;//探索目的地点
