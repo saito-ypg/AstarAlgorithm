@@ -59,8 +59,8 @@ void Aster::search()
 				index = i;
 			}
 		}
-		Cell now;
-		now=openCells.at(index);
+		Cell* parent = openCells.at(index).parent;
+		Cell now=openCells.at(index);//Ç»ÇÒÇ≈Ç±Ç±Ç≈êeïœÇÌÇÈÇÀÇÒ
 		closeCells.push_back(openCells.at(index));
 		openCells.erase(openCells.begin() + index);
 
