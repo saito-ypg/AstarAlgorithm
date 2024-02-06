@@ -7,8 +7,9 @@
 const int nonPath = 0;//0は通れない場所！
 int Aster::heuristic(POS now)
 {
-	//return abs(now.x_ - target_.x_) + abs(now.y_ - target_.y_);
-	return now.x_ * now.x_ + now.y_ * now.y_;
+	int x = target_.x_ - now.x_;
+	int y = target_.y_ - now.y_;
+	return pow(x,2) + pow(y,2);
 }
 
 Aster::Aster()
@@ -36,8 +37,8 @@ Aster::~Aster()
 void Aster::BeginSearch()
 {
 	//CellMap.at(start_.y_).at(start_.x_).certainCost = 0;
-	Cell* startcell=new Cell(start_);
-	startcell->cCost = 0;
+	Cell startcell=Cell(start_);
+	startcell.cCost = 0;
 	openCells.push_back(startcell);
 	openCells.front().cCost = 0;
 	search();
@@ -58,9 +59,11 @@ void Aster::search()
 				index = i;
 			}
 		}
+		Cell now;
+		now=openCells.at(index);
 		closeCells.push_back(openCells.at(index));
 		openCells.erase(openCells.begin() + index);
-		Cell now = closeCells.back();
+
 		if (now.cellpos == target_)
 		{
 			std::cout << "探索が終了しました" << std::endl;
@@ -96,33 +99,48 @@ void Aster::search()
 //現在ノードがゴールノードだったら終了
 	//ゴールノードが見つからなかったら終了
 }
-void Aster::checkNext(POS next,Cell nowCell)
+void Aster::checkNext(POS next, Cell &nowCell)
 {
-	if(next.x_>=mapX||next.x_<0||next.y_>=mapY||next.y_<0)//範囲外なら見ない
+	if (next.x_ >= mapX || next.x_ < 0 || next.y_ >= mapY || next.y_ < 0)//範囲外なら見ない
 	{
 		return;
 	}
-		Cell nextcell(next);
-	if (map.at(next.y_).at(next.x_) != nonPath //通れないマスではない
-		&& (std::find(closeCells.begin(), closeCells.end(), nextcell) == closeCells.end()))//かつcloselistに入っていない
+	if (map.at(next.y_).at(next.x_) == nonPath) //通れないマスなら見ない
 	{
-		auto itr = std::find(openCells.begin(), openCells.end(), nextcell);
-		if (itr == openCells.end())//openlistに入ってなかったら
-		{//cell追加する
-			nextcell.parent = &nowCell;
-			nextcell.cCost = nowCell.cCost + map[next.y_][next.x_];//実コスト追加
-			nextcell.hCost = heuristic(next);//推測コスト
-			nextcell.eCost = nextcell.cCost + nextcell.hCost;
-			openCells.push_back(nextcell);
-		}
-		else//入ってたら
+		return;
+	}
+
+	Cell nextcell(next);
+	for(auto &i:closeCells)
+	{
+		if (i.cellpos == nextcell.cellpos)//closeにあるcellなら無視
+			return;
+	}
+	
+	
+	
+	for (int i = 0; i < openCells.size(); i++)
+	{
+		auto& itrcell = openCells.at(i);
+		if (itrcell.cellpos == nextcell.cellpos)//目的のcellがすでにopenに存在するなら
 		{
-			int comp = nowCell.cCost + map[next.y_][next.x_];
-			if (itr->cCost > comp)//実コスト比較して、少なければ親をnowにして実コスト更新←条件あってるか
-				itr->parent = &nowCell;
-			itr->cCost = comp;
+			if (itrcell.cCost > nowCell.cCost)//実コスト比較して、少なければ親をnowにして実コスト更新←条件あってるか
+			{
+				itrcell.parent = &nowCell;
+			}
+			return;
 		}
 	}
+
+
+	{//cell追加する
+		nextcell.parent = &nowCell;
+		nextcell.cCost = nowCell.cCost + map[next.y_][next.x_];//実コスト追加
+		nextcell.hCost = heuristic(next);//推測コスト
+		nextcell.eCost = nextcell.cCost + nextcell.hCost;
+		openCells.push_back(nextcell);
+	}
+	
 }
 void Aster::getRoute(Cell cell)
 {
@@ -138,13 +156,3 @@ void Aster::Show()
 	}
 }
 
-//Aster::Cell Aster::Cell::operator=(const Cell& a)
-//{
-//	Cell retval;
-//	retval.cellpos = a.cellpos;
-//	retval.cCost = a.cCost;
-//	retval.hCost = a.hCost;
-//	retval.eCost = a.eCost;
-//	retval.parent = a.parent;
-//	return retval;
-//}
