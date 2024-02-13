@@ -1,4 +1,5 @@
 #include<iostream>
+#include<iomanip>
 #include<cmath>
 #include<algorithm>
 #include "Aster.h"
@@ -17,9 +18,9 @@ int Aster::heuristic(POS now)
 Aster::Aster()
 {
 	map = {
-		   {1,1,0,1,1,1},
+		   {1,1,40,1,1,1},
 		   {1,1,0,1,0,1},
-		   {1,1,1,0,1,0},
+		   {1,1,1,0,1,3},
 		   {1,1,1,1,1,1},
 		   {1,1,1,1,1,1},
 		   {1,1,1,1,1,1},
@@ -34,6 +35,13 @@ Aster::~Aster()
 
 void Aster::BeginSearch()
 {
+	if (map.at(start_.y_).at(start_.x_)==nonPath||
+		start_.y_<0||start_.y_>=mapY||
+		start_.x_<0||start_.x_>=mapX)
+	{
+		std::cout << "スタート位置が不正です！" << std::endl;
+		return;
+	}
 	//CellMap.at(start_.y_).at(start_.x_).certainCost = 0;
 	Cell startcell=Cell(start_);
 	startcell.cCost = 0;
@@ -149,10 +157,92 @@ void Aster::getRoute(Cell cell)
 }
 void Aster::Show()
 {
+	using std::cout;
+	using std::endl;
+	for (int x = 0; x < (mapX+1) * 2; x++)
+	{
+		cout << "*";
+	}
+	cout << endl;
+	for (int y=0;y<mapY;y++)
+	{
+		cout << "*";
+		for (int x=0;x<mapX;x++)
+		{
+			
+			int& cell = map.at(y).at(x);
+			if (cell == nonPath)
+			{
+				cout << std::setw(2) << "■";
+			}
+			else if (POS(x, y) == start_)
+			{
+				cout << std::setw(2) << "S";
+			}
+			else if (POS(x, y) == target_)
+			{
+				cout << std::setw(2) << "G";
+			}
+			
+			else
+			{
+				cout << std::setw(2) << cell;
+			}
+		}
+		cout << "*";
+		cout<<endl;
+	}
+	for (int x = 0; x <( mapX+1) * 2; x++)
+	{
+		cout << "*";
+	}
+	cout << endl;
+	cout << "↓" << endl;
+	
 	for (auto i : Route)
 	{
-		std::cout << i.toString ()<< std::endl;
+		map.at(i.y_).at(i.x_) = INT_MAX;
 	}
+
+	for (int x = 0; x < (mapX + 1) * 2; x++)
+	{
+		cout << "*";
+	}
+	cout << endl;
+	for (int y = 0; y < mapY; y++)
+	{
+		cout << "*";
+		for (int x = 0; x < mapX; x++)
+		{
+
+			int& cell = map.at(y).at(x);
+			if (cell == nonPath)
+			{
+				cout << std::setw(2) << "■";
+			}
+			else if (POS(x, y) == start_)
+			{
+				cout << std::setw(2) << "S";
+			}
+			else if (POS(x, y) == target_)
+			{
+				cout << std::setw(2) << "G";
+			}
+
+			else if (cell == INT_MAX)
+			{
+				cout << std::setw(2) << "◇";
+			}
+			else cout << std::setw(2)<<" ";
+		}
+		cout << "*";
+		cout << endl;
+	}
+	for (int x = 0; x < (mapX + 1) * 2; x++)
+	{
+		cout << "*";
+	}
+	cout << endl;
 
 }
 

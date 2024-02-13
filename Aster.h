@@ -32,8 +32,7 @@ public:
 	//	Cell operator=(const Cell& a);
 	};
 private:
-	vector < vector < int >> map;//通れるところとかコストとか
-	//vector < vector < Cell >> CellMap;//情報入れておくもの
+
 	int heuristic(POS now);//現在地からの最短経路
 	void search();//肝要。再帰？
 	void checkNext(POS next,Cell*const nowCell );
@@ -43,7 +42,7 @@ private:
 public:
 	POS target_;//探索目的地点
 	POS start_;//探索開始地点
-
+	vector < vector < int >> map;//通れるところとかコストとか
 	vector<POS> Route;//探索終了したらこれに入れてって後でreverse
 	Aster();
 	~Aster();
