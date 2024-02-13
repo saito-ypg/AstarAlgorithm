@@ -20,7 +20,7 @@ Aster::Aster()
 	map = {
 		   {1,1,40,1,1,1},
 		   {1,1,0,1,0,1},
-		   {1,1,1,0,1,3},
+		   {0,1,1,0,1,3},
 		   {1,1,1,1,1,1},
 		   {1,1,1,1,1,1},
 		   {1,1,1,1,1,1},
@@ -74,6 +74,7 @@ void Aster::search()
 			std::cout << "’Tõ‚ªI—¹‚µ‚Ü‚µ‚½" << std::endl;
 			getRoute(*now);
 			std::reverse(Route.begin(),Route.end());
+			Show();
 			return;
 		}
 		//ã‰º¶‰EŒ©‚é
